@@ -1,0 +1,94 @@
+#!/usr/bin/env python3.8
+
+import subprocess as sub
+import os
+import sys
+from datetime import datetime
+import time
+
+
+
+
+now = datetime.now()
+timestamp = now.strftime("%y%m%d-%H.%M%p")
+name = 'Patrick'
+
+
+Templatetext = '''
+Clive: 
+    Yesterday:
+        -
+    Today:
+        -
+Jill: 
+    Yesterday:
+        -
+    Today:
+        -
+Adam: 
+    Yesterday:
+        -
+    Today:
+        -
+Patrick:
+    Yesterday:
+        -
+    Today:
+        -
+
+
+
+General Notes:
+    -
+
+Action Items:
+    -
+
+'''
+
+splitTemplateText = Templatetext.splitlines(True)
+
+
+def set_path():
+    if len(sys.argv) == 1:
+        path = '/Users/patricklarsen/Google Drive File Stream/My Drive/My Notes/General'
+    elif sys.argv[1] == 's':
+        path = "/Users/patricklarsen/Google Drive File Stream/My Drive/Meetings - Standups"
+    return path
+
+
+path = set_path()
+
+def personalnote():
+    global timestamp
+    global path
+    os.chdir(path)
+    sub.call(['vim', f'{timestamp}.docx'])
+
+def standup():
+    global timestamp
+    global path
+    global name
+    filename = f'{name}-{timestamp}.docx'
+    os.chdir(path)
+    sub.call(['touch', filename])
+    with open(filename,'w') as f:
+        f.writelines(splitTemplateText)
+        f.close()
+    sub.call(['vim',filename])    
+
+
+def main():
+    if len(sys.argv) == 1:
+        personalnote()
+    if len(sys.argv) >1 and sys.argv[1] ==  "s":
+        standup()
+    else:
+        return '''use 'p'as an argument for a personal note
+                or use 's' as an arugment for standup meetings'''
+
+if __name__ == "__main__":
+    main()
+
+
+
