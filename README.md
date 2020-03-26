@@ -1,2 +1,2 @@
 # scripts-utilities
-these are some scripts I made and use daily
+these are some bash and python scripts I use daily
